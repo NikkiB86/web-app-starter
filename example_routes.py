@@ -5,10 +5,11 @@ from flask import request
 
 # You won't need to nest your routes in app.py in a method like this
 def apply_example_routes(app):
-    # GET /books
-    # Returns a list of books
-    # Try it:
-    #   ; curl http://localhost:5001/books
+#     # GET /books
+#     # Returns a list of books
+#     # Try it:
+#     #   ; curl http://localhost:5001/books
+
     @app.route('/books', methods=['GET'])
     def get_books():
         connection = get_flask_database_connection(app)
