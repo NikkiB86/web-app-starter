@@ -109,4 +109,61 @@ def test_post_sortname_no_names(web_client):
     assert response.status_code == 400
     assert response.data.decode('utf-8') == 'you did not submit any names'
 
+
+def test_post_album(db_connection, web_client):
+    db_connection.seed("seeds/record_store.sql")
+    post_response = web_client.post('/albums', data={'title': 'Views', 'release_year': '2016' , 'artist_id' : '1'})
+    assert post_response.status_code ==200
+    assert post_response.data.decode('utf-8') == ""
+
+    # get_response = web_client.get('/albums')
+    # assert get_response.status_code ==200
+    # assert get_response.data.decode('utf-8') == " Album(1, Take Care, 2011, 1),  Album(2, Views, 2016, 1)"
+
+def test_get_album(db_connection, web_client):
+    db_connection.seed("seeds/record_store.sql")
+    response = web_client.get('/albums', data={'title': 'Views', 'release_year': '2016' , 'artist_id' : '1'})
+    assert response.status_code ==200
+    assert response.data.decode('utf-8') == ""\
+    " Album(1, Take Care, 2011, 1)"
+    
+def test_post_artist(db_connection, web_client):
+    db_connection.seed("seeds/music_library.sql")
+    response = web_client.post('/artists', data={'name': 'wild nothing', 'genre': 'indie'})
+    assert response.status_code == 200
+    assert response.data.decode('utf-8') == ""
+
+    response = web_client.get('/artists')
+    assert response.status_code ==200
+    assert response.data.decode('utf-8') == ('Pixies, ABBA, Taylor Swift, Nina Simone, wild nothing')
+
+    
+
+def test_get_artist(db_connection, web_client):
+    db_connection.seed("seeds/music_library.sql")
+    response = web_client.get('/artists')
+    assert response.status_code ==200
+    assert response.data.decode('utf-8') == ('Pixies, ABBA, Taylor Swift, Nina Simone')
+
+
+#    POST /albums
+# title: Views
+# release_year: 2016
+# artist_id :1
+# expected response 200 ok
+
+# no content
+
+# GET /albums
+# expected response 200 ok
+
+# Album(1, 'Take Care', 2011, 1)
+# Album(2, 'Views', 2016, 1)
+
+
+# POST /albums
+# expected response 400 bad request
+
+# "you need to submit a title, release_year and artist_id"
+
 # === End Example Code ===
